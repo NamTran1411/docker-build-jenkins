@@ -9,7 +9,7 @@ pipeline {
 
          stage ("SSH Agent"){
                steps {
-                sshagent(['ssh-agent-admin']) {
+                sshagent(['ssh-remote']) {
                sh '''
                         ssh -o StrictHostKeyChecking=no -l adminlc 192.168.64.2 'cd /var/www/loginLC && pm2 reload all && cd && ftp 192.168.64.2'
                     '''
