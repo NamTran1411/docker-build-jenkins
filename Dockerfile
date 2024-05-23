@@ -25,11 +25,6 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
 
-# Create and use a non-root user for security purposes
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nextjs -u 1001 -G nodejs
-USER nextjs
-
 # Set non-root user and expose port 3006 for the application
 EXPOSE 3000
 ENV PORT 3000
