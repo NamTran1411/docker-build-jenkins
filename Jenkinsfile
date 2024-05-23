@@ -6,27 +6,16 @@ pipeline {
     }
 
     stages {
-
          stage ("SSH Agent"){
                steps {
                 sshagent(['ssh-remote']) {
                sh '''
-                        ssh -o StrictHostKeyChecking=no -l adminlc 192.168.64.2 'cd /var/www/loginLC && pm2 reload all && cd && ftp 192.168.64.2'
+                        ssh -o StrictHostKeyChecking=no -l adminlc 192.168.64.2 'cd ./Documents/docker-build-jenkins && git pull origin main && docker compose build'
                     '''
 
             }
          }
          }
-        stage("install") {
-            steps {
-                sh 'npm install'
-            }
-        }
-        stage("build") {
-            steps {
-                sh 'npm run build'
-            }
-        }
     }
 
     post {
