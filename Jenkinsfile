@@ -4,31 +4,50 @@ pipeline {
     tools {
         nodejs "nodejs"
     }
+
     environment {
-        // Tạo version dựa trên timestamp
-        IMAGE_VERSION = "${env.BUILD_ID}"
+        VERSION_FILE = 'version.txt'  // Path to the version file
     }
+
     stages {
-         stage('Prepare') {
+        stage('Increment Version') {
             steps {
                 script {
-                    // Hoặc sử dụng git commit hash
-                    IMAGE_VERSION = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
-                    echo "Using IMAGE_VERSION: ${IMAGE_VERSION}"
+                    // Check if the version file exists
+                    if (!fileExists(env.VERSION_FILE)) {
+                        // If not, create the file with the initial version
+                        writeFile file: env.VERSION_FILE, text: '0.0.1'
+                    }
+                    // Read the current version
+                    def currentVersion = readFile(file: env.VERSION_FILE).trim()
+                    // Increment the version (example: increment the patch part)
+                    def (major, minor, patch) = currentVersion.tokenize('.')
+                    def newVersion = "${major}.${minor}.${Integer.parseInt(patch) + 1}"
+                    // Write the new version to the file
+                    writeFile file: env.VERSION_FILE, text: newVersion
+                    // Set an environment variable VERSION
+                    env.VERSION = newVersion
                 }
             }
         }
-         stage ("SSH Server"){
-               steps {
-                sshagent(['ssh-remote']) {
-               sh '''
-                        ssh -o StrictHostKeyChecking=no -l adminlc 192.168.64.2 'cd ./Documents/docker-build-jenkins && git pull origin main &&
-                        docker compose build --build-arg VERSION=${IMAGE_VERSION} &&
-                         docker compose up -d'
-                    '''
+         stage('Run Version Script and Build Docker Image') {
+            steps {
+                sh './increment_version.sh'
             }
-         }
-         }
+        }
+        stage ("SSH Server"){
+            steps {
+                sshagent(credentials: ['ssh-remote']) {
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no adminlc@192.168.64.2 '
+                            cd ./Documents/docker-build-jenkins &&
+                            git pull origin main &&
+                            docker compose build --build-arg VERSION=${env.VERSION} &&
+                            docker compose up -d
+                        '
+                    '''
+                }
+            }
+        }
     }
-
 }
