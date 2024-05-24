@@ -10,6 +10,11 @@ pipeline {
     }
 
     stages {
+        stage('Run Version Script and Build Docker Image') {
+            steps {
+                sh './increment_version.sh'
+            }
+        }
         stage('Increment Version') {
             steps {
                 script {
@@ -28,11 +33,6 @@ pipeline {
                     // Set an environment variable VERSION
                     env.VERSION = newVersion
                 }
-            }
-        }
-         stage('Run Version Script and Build Docker Image') {
-            steps {
-                sh './increment_version.sh'
             }
         }
         stage ("SSH Server"){
