@@ -1,7 +1,7 @@
 services:
   nextapp:
     container_name: docker_builder-container
-    image: docker_builder:1.2.3
+    image: docker_builder
     build: .
     ports:
       - "3000:3000"
