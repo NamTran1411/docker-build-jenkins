@@ -5,11 +5,6 @@ pipeline {
         nodejs "nodejs"
     }
     stages {
-        stage('Run Version Script and Build Docker Image') {
-            steps {
-                sh './increment_version.sh'
-            }
-        }
         stage ("SSH Server"){
             steps {
                 sshagent(credentials: ['ssh-remote']) {
