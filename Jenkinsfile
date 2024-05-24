@@ -15,26 +15,6 @@ pipeline {
                 sh './increment_version.sh'
             }
         }
-        stage('Increment Version') {
-            steps {
-                script {
-                    // Check if the version file exists
-                    if (!fileExists(env.VERSION_FILE)) {
-                        // If not, create the file with the initial version
-                        writeFile file: env.VERSION_FILE, text: '0.0.1'
-                    }
-                    // Read the current version
-                    def currentVersion = readFile(file: env.VERSION_FILE).trim()
-                    // Increment the version (example: increment the patch part)
-                    def (major, minor, patch) = currentVersion.tokenize('.')
-                    def newVersion = "${major}.${minor}.${Integer.parseInt(patch) + 1}"
-                    // Write the new version to the file
-                    writeFile file: env.VERSION_FILE, text: newVersion
-                    // Set an environment variable VERSION
-                    env.VERSION = newVersion
-                }
-            }
-        }
         stage ("SSH Server"){
             steps {
                 sshagent(credentials: ['ssh-remote']) {
