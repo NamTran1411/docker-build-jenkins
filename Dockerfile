@@ -22,7 +22,7 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
 
-# Set non-root user and expose port 3006 for the application
+# Set non-root user and expose port 3006
 EXPOSE 3000
 ENV PORT 3000
 
