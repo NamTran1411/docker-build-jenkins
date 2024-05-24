@@ -1,6 +1,35 @@
 #!/bin/bash
 # Description: Script to increment Docker image version, build, and push
 # Read the new version
+version_file="version.txt"
+
+# Kiểm tra xem file version.txt đã tồn tại hay chưa
+if [[ ! -f "$version_file" ]]; then
+    echo "1.2.6" > "$version_file"
+    echo "Version file created with initial version 1.2.6"
+    exit 0
+fi
+
+
+current_version=$(cat "$version_file")
+
+# Tách version thành major, minor và patch
+IFS='.' read -r -a parts <<< "$current_version"
+major=${parts[0]}
+minor=${parts[1]}
+patch=${parts[2]}
+
+# Tăng giá trị patch
+patch=$((patch + 1))
+
+# Tạo version mới
+new_version="$major.$minor.$patch"
+
+# Lưu version mới vào file
+echo "$new_version" > "$version_file"
+
+# In version mới ra màn hình
+echo "Updated version to $new_version"
 version=$(cat version.txt)
 ssh adminlc@192.168.64.2 "
     cd ./Documents/docker-build-jenkins &&
