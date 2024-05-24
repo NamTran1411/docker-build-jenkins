@@ -1,6 +1,6 @@
 #!/bin/bash
 # Description: Script to increment Docker image version, build, and push
-# Read the new version
+
 version_file="version.txt"
 
 # Kiểm tra xem file version.txt đã tồn tại hay chưa
