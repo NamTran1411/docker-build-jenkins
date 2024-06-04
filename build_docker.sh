@@ -5,8 +5,7 @@ version_file="version.txt"
 
 # Kiểm tra xem file version.txt đã tồn tại hay chưa
 if [[ ! -f "$version_file" ]]; then
-    echo "1.2.6" > "$version_file"
-    echo "Version file created with initial version 1.2.6"
+    echo "Version file does exist"
     exit 0
 fi
 
