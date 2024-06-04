@@ -10,10 +10,14 @@ if [[ -f "$version_file" ]]; then
   IFS='.' read -r -a parts <<< "$current_version"
   major=${parts[0]}
   minor=${parts[1]}
+  patch=${parts[2]}
+
+  # Tăng giá trị patch
   patch=$((patch + 1))
 
   # Tạo version mới
   new_version="$major.$minor.$patch"
+
   echo $new_version > version.txt
 else
   current_version="1.0.0"
