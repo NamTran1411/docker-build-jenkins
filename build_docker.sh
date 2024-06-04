@@ -39,7 +39,7 @@ echo "Updated version to $new_version"
 ssh adminlc@192.168.64.2 << EOF
     cd ./Documents/docker-build-jenkins &&
     git pull origin main &&
-    docker build -t docker_builder:$new_version . &&
+    docker build -t --no-cache docker_builder:$new_version . &&
     docker compose up -d
 
     # Remove previous image only if new version is not 1.0.0
@@ -52,7 +52,7 @@ ssh adminlc@192.168.64.2 << EOF
     fi
 
     # Remove previous image only if new version is not 1.0.0
-    if [[ "$new_version" != "1.0.0" ]]; then
+    if [[ $new_version != "1.0.0" ]]; then
       docker image rm docker_builder:$current_version
     fi
 EOF
