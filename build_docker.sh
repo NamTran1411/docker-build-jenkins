@@ -15,8 +15,6 @@ if [[ -f "$version_file" ]]; then
   # Tạo version mới
   new_version="$major.$minor.$patch"
 else
-  # Create a new version.txt file with initial version 1.0.0
-  echo "1.0.0" > "$version_file"
   current_version="1.0.0"
   echo "Version is already 1.0.0. Not incrementing."
   new_version="$current_version"
