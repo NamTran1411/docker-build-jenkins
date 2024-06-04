@@ -1,8 +1,4 @@
 #!/bin/bash
-
-# Description: Script to increment Docker image version, build, and push
-# Version file path
-
 # SSH execution with conditional docker image removal
 ssh adminlc@192.168.64.2 << EOF
     cd ./Documents/docker-build-jenkins
@@ -23,7 +19,7 @@ ssh adminlc@192.168.64.2 << EOF
     else
       current_version="1.0.0"
       echo "Version is already 1.0.0. Not incrementing."
-      new_version="$current_version"
+      new_version=$current_version
     fi
 
     echo "Current version: $current_version"
