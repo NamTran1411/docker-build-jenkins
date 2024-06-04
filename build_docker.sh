@@ -2,10 +2,8 @@
 # SSH execution with conditional docker image removal
 ssh adminlc@192.168.64.2 << EOF
     cd ./Documents/docker-build-jenkins
-
     git pull origin main
-    version_file="version.txt"
-
+    version_file=version.txt
     if [[ -f $version_file ]]; then
       # Read the current version from the file
       current_version=$(cat $version_file)
