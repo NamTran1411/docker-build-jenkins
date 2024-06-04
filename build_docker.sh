@@ -35,8 +35,9 @@ ssh adminlc@192.168.64.2 << EOF
       echo "File 'version_file' exits."
       echo $new_version > version.txt
     else
-     # Actions to take if version_file doesn't exist
-      touch version.txt && echo $new_version > version.txt
+      # Actions to take if version_file doesn't exist
+      touch version.txt
+      echo $new_version > version.txt
     fi
 
     if [[ $new_version != "1.0.0" ]]; then
