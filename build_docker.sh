@@ -39,7 +39,7 @@ echo "Updated version to $new_version"
 ssh adminlc@192.168.64.2 << EOF
     cd ./Documents/docker-build-jenkins &&
     git pull origin main &&
-    docker build -t --no-cache docker_builder:$new_version . &&
+    docker build -t docker_builder:$new_version . &&
     docker compose up -d
 
     if [[ -f $version_file ]]; then
