@@ -1,47 +1,40 @@
 #!/bin/bash
 
-# Description: Script to increment Docker image version, build, and push
-
-
-
 
 # SSH server details (replace with your actual values)
 SSH_SERVER="adminlc@192.168.64.2"
 
 # Connect to SSH server
 ssh $SSH_SERVER << EOF  # EOF prevents local command interpretation
+
   git pull origin main
-  # Version file path
+
   version_file="version.txt"
-  # Check if version.txt exists
+
   if [[ ! -f "$version_file" ]]; then
     echo "Version file does not exist. Creating with initial version 1.0.0"
-    echo "1.0.0" > "$version_file"
+    echo "1.0.0" > $version_file
   fi
 
-  # Read the current version from the file
-  current_version=$(cat "$version_file")
+
+  current_version=$(cat $version_file)
 
   echo "Current version: $current_version"
 
-  # Tách version thành major, minor và patch
   IFS='.' read -r -a parts <<< "$current_version"
   major=${parts[0]}
   minor=${parts[1]}
   patch=$((patch + 1))
 
-  # Tạo version mới
   new_version="$major.$minor.$patch"
 
-  # Update version file (optional, can be done locally after script execution)
-  # echo "$new_version" > "$version_file"
 
-  # In version mới ra màn hình
   echo "Updated version to $new_version"
 
-  # Docker commands (assuming Docker is installed and configured on remote server)
-  cd ./Documents/docker-build-jenkins &&
-  docker build -t docker_builder:$new_version . &&
+  cd ./Documents/docker-build-jenkins
+
+  docker build -t docker_builder:$new_version .
+
   docker compose up -d && docker image rm docker_builder:$current_version
 
 EOF
