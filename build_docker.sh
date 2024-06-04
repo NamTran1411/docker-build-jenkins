@@ -45,11 +45,12 @@ ssh adminlc@192.168.64.2 << EOF
     # Remove previous image only if new version is not 1.0.0
     if [[ -f $version_file ]]; then
       echo "File 'version_file' exits."
+      echo $new_version > version.txt
     else
      # Actions to take if version_file doesn't exist
-      mkdir version.txt
+      mkdir version.txt && echo $new_version > version.txt
     fi
-    echo $new_version > version.txt
+
     # Remove previous image only if new version is not 1.0.0
     if [[ "$new_version" != "1.0.0" ]]; then
       docker image rm docker_builder:$current_version
