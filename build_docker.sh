@@ -42,7 +42,6 @@ ssh adminlc@192.168.64.2 << EOF
     docker build -t --no-cache docker_builder:$new_version . &&
     docker compose up -d
 
-    # Remove previous image only if new version is not 1.0.0
     if [[ -f $version_file ]]; then
       echo "File 'version_file' exits."
       echo $new_version > version.txt
@@ -51,7 +50,6 @@ ssh adminlc@192.168.64.2 << EOF
       mkdir version.txt && echo $new_version > version.txt
     fi
 
-    # Remove previous image only if new version is not 1.0.0
     if [[ $new_version != "1.0.0" ]]; then
       docker image rm docker_builder:$current_version
     fi
